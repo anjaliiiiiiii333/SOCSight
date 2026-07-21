@@ -1,18 +1,29 @@
-from flask import Flask
+from flask import Flask, render_template, request
+import os
 
 app = Flask(__name__)
 
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 @app.route("/")
 def home():
-    return "Welcome to SOCSight"
+    return render_template("index.html")
 
-@app.route("/about")
-def about():
-    return "SOCSight is a Mini SIEM built with Flask."
+@app.route("/upload", methods=["POST"])
+def upload():
+    file = request.files["logfile"]
 
-@app.route("/health")
-def health():
-    return "Application Status: Healthy"
+    if file.filename == "":
+        return "No file selected."
+
+    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(filepath)
+
+    with open(filepath, "r") as file:
+     content = file.read()
+
+    return f"<pre>{content}</pre>"
 
 if __name__ == "__main__":
     app.run(debug=True)
