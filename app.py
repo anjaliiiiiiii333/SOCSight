@@ -27,11 +27,35 @@ def upload():
     # Read the log file line by line
     logs = []
 
+    parsed_logs = []
+
     with open(filepath, "r") as file:
      for line in file:
-        logs.append(line.strip())
 
-    return "<pre>" + "\n".join(logs) + "</pre>"
+        line = line.strip()
+        if not line:
+            continue
+        parts = line.split()
+
+        timestamp = parts[0] + " " + parts[1]
+        level = parts[2]
+        event = parts[3]
+        user = parts[4].split("=")[1]
+        ip = parts[5].split("=")[1]
+
+        parsed_logs.append(
+            f"""
+    Timestamp : {timestamp}
+    Level     : {level}
+    Event     : {event}
+    User      : {user}
+    IP        : {ip}
+
+    -------------------------
+    """
+        )
+
+    return "<pre>" + "".join(parsed_logs) + "</pre>"
 
 
 if __name__ == "__main__":
