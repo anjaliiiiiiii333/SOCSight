@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import os
-
+from parser.linux_parser import parse_logs
 app = Flask(__name__)
 
 # Folder to store uploaded log files
@@ -27,35 +27,24 @@ def upload():
     # Read the log file line by line
     logs = []
 
-    parsed_logs = []
+    parsed_logs = parse_logs(filepath)
+    output = ""
 
-    with open(filepath, "r") as file:
-     for line in file:
-
-        line = line.strip()
-        if not line:
-            continue
-        parts = line.split()
-
-        timestamp = parts[0] + " " + parts[1]
-        level = parts[2]
-        event = parts[3]
-        user = parts[4].split("=")[1]
-        ip = parts[5].split("=")[1]
-
-        parsed_logs.append(
-            f"""
-    Timestamp : {timestamp}
-    Level     : {level}
-    Event     : {event}
-    User      : {user}
-    IP        : {ip}
+    for log in parsed_logs:
+     output += f"""
+    Timestamp : {log['timestamp']}
+    Level     : {log['level']}
+    Event     : {log['event']}
+    User      : {log['user']}
+    IP        : {log['ip']}
 
     -------------------------
-    """
-        )
 
-    return "<pre>" + "".join(parsed_logs) + "</pre>"
+    """
+
+    return "<pre>" + output + "</pre"
+
+
 
 
 if __name__ == "__main__":
