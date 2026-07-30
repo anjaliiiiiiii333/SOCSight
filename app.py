@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import os
 from parser.linux_parser import parse_logs
+from detector.bruteforce import detect_bruteforce
 app = Flask(__name__)
 
 # Folder to store uploaded log files
@@ -28,6 +29,7 @@ def upload():
     logs = []
 
     parsed_logs = parse_logs(filepath)
+    alerts = detect_bruteforce(parsed_logs)
     output = ""
 
     for log in parsed_logs:
@@ -42,7 +44,7 @@ def upload():
 
     """
 
-    return "<pre>" + output + "</pre"
+    return f"<pre>{alerts}</pre>"
 
 
 
