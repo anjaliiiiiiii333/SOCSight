@@ -30,6 +30,7 @@ def upload():
 
     parsed_logs = parse_logs(filepath)
     alerts = detect_bruteforce(parsed_logs)
+
     output = ""
 
     for log in parsed_logs:
@@ -44,7 +45,26 @@ def upload():
 
     """
 
-    return f"<pre>{alerts}</pre>"
+    output = ""
+
+    if not alerts:
+     output = "✅ No Security Alerts Detected."
+
+    else:
+     for alert in alerts:
+        output += f"""
+    🚨 ALERT
+
+    Rule      : {alert['rule']}
+    IP        : {alert['ip']}
+    Attempts  : {alert['attempts']}
+    Severity  : {alert['severity']}
+
+    -----------------------------------------
+
+    """
+
+    return "<pre>" + output + "</pre>"
 
 
 

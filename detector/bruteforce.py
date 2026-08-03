@@ -13,4 +13,22 @@ def detect_bruteforce(parsed_logs):
 
             failed_login_count[ip] += 1
 
-    return failed_login_count
+    alerts = []
+
+    for ip, count in failed_login_count.items():
+
+        if count >= 5:
+
+         alerts.append({
+
+            "rule": "Possible Brute Force Attack",
+
+            "ip": ip,
+
+            "attempts": count,
+
+            "severity": "HIGH"
+
+         })
+
+    return alerts
