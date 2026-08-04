@@ -13,7 +13,9 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def home():
     return render_template("index.html")
 
-
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 @app.route("/upload", methods=["POST"])
 def upload():
     file = request.files["logfile"]
