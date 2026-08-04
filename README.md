@@ -18,4 +18,4 @@ SOCSight is an in-progress security monitoring dashboard designed to ingest syst
 3. If an anomaly threshold is breached, a high-severity alert object is created and pushed to the Flask UI.
 
 ## 📸 Dashboard Preview
-[Insert a screenshot of your local Flask UI here later!]
+
